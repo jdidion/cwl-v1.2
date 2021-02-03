@@ -1580,7 +1580,7 @@
   label: nameroot_nameext_generated
   id: 112
   doc: Test that nameroot and nameext are generated from basename at execution time by the runner
-  tags: [ step_input_expression, workflow ]
+  tags: [ step_input, workflow ]
 
 - job: tests/wc-job.json
   output: {}
@@ -2811,7 +2811,7 @@
   tool: tests/timelimit.cwl
   label: timelimit_basic
   doc: Test that job fails when exceeding time limit
-  tags: [ command_line_tool, timelimit ]
+  tags: [ command_line_tool, timelimit, work_reuse ]
   id: 214
 
 - job: tests/empty.json
@@ -2827,7 +2827,7 @@
   tool: tests/timelimit3.cwl
   label: timelimit_zero_unlimited
   doc: Test zero timelimit means no limit
-  tags: [ command_line_tool, timelimit ]
+  tags: [ command_line_tool, timelimit, work_reuse ]
   id: 216
 
 - job: tests/empty.json
@@ -2835,7 +2835,7 @@
   tool: tests/timelimit4.cwl
   label: timelimit_from_expression
   doc: Test expression in time limit
-  tags: [ command_line_tool, timelimit, inline_javascript ]
+  tags: [ command_line_tool, timelimit, inline_javascript, work_reuse ]
   id: 217
 
 - job: tests/empty.json
@@ -2870,7 +2870,7 @@
   tool: tests/timelimit3-wf.cwl
   label: timelimit_zero_unlimited_wf
   doc: Test zero timelimit means no limit in workflow
-  tags: [ workflow, timelimit, inline_javascript ]
+  tags: [ workflow, timelimit, inline_javascript, work_reuse ]
   id: 221
 
 - job: tests/empty.json
@@ -2878,7 +2878,7 @@
   tool: tests/timelimit4-wf.cwl
   label: timelimit_from_expression_wf
   doc: Test expression in time limit in workflow
-  tags: [ workflow, timelimit, inline_javascript ]
+  tags: [ workflow, timelimit, inline_javascript, work_reuse ]
   id: 222
 
 - job: tests/empty.json
@@ -3226,7 +3226,7 @@
   output:
     out: true
   doc: Test that 'listing' is not present when LoadListingRequirement is 'no_listing'
-  tags: [ command_line_tool ]
+  tags: [ command_line_tool, load_listing ]
   id: 243
 
 - job: tests/listing-job.yml
@@ -3247,7 +3247,7 @@
     Test that 'listing' is present in top directory object but not
     subdirectory object when LoadListingRequirement is
     'shallow_listing'
-  tags: [ command_line_tool ]
+  tags: [ command_line_tool, load_listing ]
   id: 245
 
 - job: tests/listing-job.yml
@@ -3263,6 +3263,21 @@
   id: 246
 
 - job: tests/listing-job.yml
+  tool: tests/listing_shallow3.cwl
+  label: listing_outputBinding_loadListing
+  output:
+    out: {
+        "basename": "file2",
+        "checksum": "sha1$da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "class": "File",
+        "location": "file2",
+        "size": 0
+    }
+  doc: >
+    Test that loadListing works when used on outputBinding.
+  tags: [ command_line_tool ]
+
+- job: tests/listing-job.yml
   tool: tests/listing_deep1.cwl
   label: listing_requirement_deep
   output:
@@ -3271,7 +3286,7 @@
     Test that 'listing' is present in top directory object and in
     subdirectory objects when LoadListingRequirement is
     'deep_listing'
-  tags: [ command_line_tool ]
+  tags: [ command_line_tool, load_listing ]
   id: 247
 
 - job: tests/listing-job.yml
@@ -3363,6 +3378,19 @@
      }
   tags: [ resource, command_line_tool ]
   id: 256
+
+- job: tests/synth-file-job.yml
+  tool: tests/synth-file.cwl
+  label: cat_synthetic_file
+  doc: Test the generation of a synthetic file with inline contents.
+  output:
+    sequence: {
+      "class": "File",
+      "checksum": "sha1$5d64b71392b1e00a3ad893db02d381d58262c2d6",
+      "size": 7
+    }
+  tags: [ required, command_line_tool ]
+  id: 257
 
 - $import: tests/string-interpolation/test-index.yaml
 
